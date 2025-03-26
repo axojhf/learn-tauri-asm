@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  windows-build:
+    name: Demo Build
+    runs-on: windows-2022
+    steps:
+      - name: Prepare Env
+        run: |
+          rustup update
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+      - name: Build
+        run: |
+          cd C:\ ; git clone --depth=1 https://github.com/axojhf/learn-tauri-asm
+          cd learn-tauri-asm/src-tauri ; cargo tauri build
+          ls target\release
+          7z a C:\windows_build.7z target\release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows_build
+          path: C:\windows_build.7z
+      - name: Update Cpr Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build
+          prerelease: true
+          files: |
+            C:\windows_build.7z
