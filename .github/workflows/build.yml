@@ -12,16 +12,18 @@ jobs:
       - name: Prepare Env
         run: |
           rustup update
-          cargo install tauri-cli --version "^2.0.0" --locked
+      - uses: oven-sh/setup-bun@v2
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
       - name: Build
         run: |
           cd C:\ ; git clone --depth=1 https://github.com/axojhf/learn-tauri-asm
-          cd learn-tauri-asm/src-tauri ; ; cargo tauri build
+          cd learn-tauri-asm
+          bun install
+          bun run tauri build --no-bundle
           ls target\release
-          7z a C:\windows_build.7z target\release
+          7z a C:\windows_build.7z target\release\tauri-asm.exe
       - uses: actions/upload-artifact@v4
         with:
           name: windows_build
