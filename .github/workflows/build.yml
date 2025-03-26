@@ -22,8 +22,7 @@ jobs:
           cd learn-tauri-asm
           bun install
           bun run tauri build --no-bundle
-          ls target\release
-          7z a C:\windows_build.7z target\release\tauri-asm.exe
+          7z a C:\windows_build.7z src-tauri\target\release\tauri-asm.exe
       - uses: actions/upload-artifact@v4
         with:
           name: windows_build
